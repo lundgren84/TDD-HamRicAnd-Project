@@ -6,6 +6,13 @@ using System.Threading.Tasks;
 
 namespace VideoStoreBusinessLayer
 {
+    public class MovieDontExistsExeption : Exception
+    {
+        public MovieDontExistsExeption(string message) : base(message)
+        {
+
+        }
+    }
     public class CustomerExistsExeption: Exception
     {
         public CustomerExistsExeption(string message) : base(message)
@@ -13,7 +20,13 @@ namespace VideoStoreBusinessLayer
 
         }
     }
+    public class InvalidSocialSecurityNumberExeption : Exception
+    {
+        public InvalidSocialSecurityNumberExeption(string message) : base(message)
+        {
 
+        }
+    }
     public class MovieTitelsIsNullOrEmptyExeption : Exception
     {
         public MovieTitelsIsNullOrEmptyExeption(string message) : base(message)

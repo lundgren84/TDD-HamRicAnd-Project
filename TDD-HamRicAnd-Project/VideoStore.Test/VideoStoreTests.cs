@@ -12,19 +12,23 @@ namespace VideoStoreTest
     [TestFixture]
     public class VideoStoreTests
     {
-        private VideoStore sut;
+        private IVideoStore sut;
         private Movie TestMovie;
+        private Customer TestCustomer;
+        private IRentals rental = Substitute.For<IRentals>();
+
         [SetUp]
         public void Setup()
         {
             sut = new VideoStore();
             TestMovie = new Movie("Transporter", MovieGenre.Action);
+            TestCustomer = new Customer("Olle Svensson", "1978-06-14");
         }
         [Test]
         public void TrueIfCanAddNewMovieToStore()
         {
             sut.AddMovie(TestMovie);
-            var movie = sut.Movies.Where(x => x.Title == "Transporter" && x.Genre == MovieGenre.Action);
+            var movie = sut.Movies.Where(x => x.Key.Title == "Transporter" && x.Key.Genre == MovieGenre.Action);
             Assert.IsTrue(movie != null);
         }
         [Test]
@@ -37,7 +41,7 @@ namespace VideoStoreTest
             });
         }
         [Test]
-        public void ThrowExeptionIfAddedMoreThen3MoviesWithSameTitle()
+        public void ThrowExeptionIfAddedFourOrMoreMoviesWithSameTitle()
         {
             sut.AddMovie(TestMovie);
             sut.AddMovie(TestMovie);
@@ -52,20 +56,42 @@ namespace VideoStoreTest
         [Test]
         public void CanRegisterCustomer()
         {
-            sut.RegisterCustomer("Olle Svensson", "780614-1213");
-            var customer = sut.GetCustomers().FirstOrDefault(x=>x.SSN == "780614-1213");
+            sut.RegisterCustomer(TestCustomer.Name,TestCustomer.SSN);
+            var customer = sut.GetCustomers().FirstOrDefault(x => x.SSN == TestCustomer.SSN);
 
             Assert.IsNotNull(customer);
         }
         [Test]
         public void ThrowExeptionIfAddExisitingUser()
         {
-            sut.RegisterCustomer("Olle Svensson", "780614-1213");
+            sut.RegisterCustomer(TestCustomer.Name, TestCustomer.SSN);
 
-            Assert.Throws<CustomerExistsExeption>(() => {
-
-                sut.RegisterCustomer("Olle Svensson", "780614-1213");
+            Assert.Throws<CustomerExistsExeption>(() =>
+            {
+                sut.RegisterCustomer(TestCustomer.Name, TestCustomer.SSN);
             });
-;        }
+            ;
+        }
+        [Test]
+        public void ThrowExeptionIfInvalidSocialSecurityNumber()
+        {
+            Assert.Throws<InvalidSocialSecurityNumberExeption>(() =>
+            {
+                sut.RegisterCustomer(TestCustomer.Name, "19781027");
+            });
+        }
+        [Test]
+        public void ThrowExeptionIfRentNonExistingMovie()
+        {
+            Assert.Throws<MovieDontExistsExeption>(() =>
+            {
+                sut.RentMovie("Olles film om havet", TestCustomer.SSN);
+            });
+        }
+        [Test]
+        public void MotRegistredCustomersCantRentMovie()
+        {
+
+        }
     }
 }
