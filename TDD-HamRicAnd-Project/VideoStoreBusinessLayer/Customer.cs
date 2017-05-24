@@ -2,5 +2,16 @@
 {
     public class Customer
     {
+        public string Name { get; set; }
+        public string SSN { get; set; }
+        public Customer(string name,string ssn)
+        {
+            this.Name = name;
+            this.SSN = ssn;
+        }
+        public Customer()
+        {
+                
+        }
     }
 }

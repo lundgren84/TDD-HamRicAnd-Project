@@ -6,13 +6,20 @@ using System.Threading.Tasks;
 
 namespace VideoStoreBusinessLayer
 {
-    
-   public class MovieTitleIsNullOrEmpty : Exception
+    public class CustomerExistsExeption: Exception
     {
-        public MovieTitleIsNullOrEmpty(string message) :base(message)
+        public CustomerExistsExeption(string message) : base(message)
         {
 
-        }    
+        }
+    }
+
+    public class MovieTitelsIsNullOrEmptyExeption : Exception
+    {
+        public MovieTitelsIsNullOrEmptyExeption(string message) : base(message)
+        {
+
+        }
     }
     public class MovieTitleOverloadExeption : Exception
     {

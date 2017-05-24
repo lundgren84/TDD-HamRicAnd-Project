@@ -31,7 +31,7 @@ namespace VideoStoreTest
         public void MovieTitleCanNotBeNullOrEmpty()
         {
             TestMovie.Title = "";
-            Assert.Throws<MovieTitleIsNullOrEmpty>(() =>
+            Assert.Throws<MovieTitelsIsNullOrEmptyExeption>(() =>
             {
                 sut.AddMovie(TestMovie);
             });
@@ -47,5 +47,25 @@ namespace VideoStoreTest
                 sut.AddMovie(TestMovie);
             });
         }
+
+        // Customer Tests
+        [Test]
+        public void CanRegisterCustomer()
+        {
+            sut.RegisterCustomer("Olle Svensson", "780614-1213");
+            var customer = sut.GetCustomers().FirstOrDefault(x=>x.SSN == "780614-1213");
+
+            Assert.IsNotNull(customer);
+        }
+        [Test]
+        public void ThrowExeptionIfAddExisitingUser()
+        {
+            sut.RegisterCustomer("Olle Svensson", "780614-1213");
+
+            Assert.Throws<CustomerExistsExeption>(() => {
+
+                sut.RegisterCustomer("Olle Svensson", "780614-1213");
+            });
+;        }
     }
 }
