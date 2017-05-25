@@ -17,7 +17,7 @@ namespace VideoStoreBusinessLayer
 
     public interface IVideoStore
     {
-        Dictionary<Movie,int> Movies { get; set; }
+        List<Movie> Movies { get; set; }
         void RegisterCustomer(string name, string socialSecurityNumber);
         void AddMovie(Movie movie);
         void RentMovie(string movieTitle, string socialSecurityNumber);

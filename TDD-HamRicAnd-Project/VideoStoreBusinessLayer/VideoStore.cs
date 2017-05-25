@@ -9,7 +9,7 @@ namespace VideoStoreBusinessLayer
 {
     public class VideoStore : IVideoStore
     {
-        public Dictionary<Movie,int> Movies { get; set; }
+        public List<Movie> Movies { get; set; }
         public Dictionary<string, string> Customers { get; set; } 
         private Regex SsnRegex = new Regex(@"^\d{4}-\d{2}-\d{2}$");
 
@@ -22,11 +22,8 @@ namespace VideoStoreBusinessLayer
         public void AddMovie(Movie movie)
         {
            if (ValidateMovie(movie))
-            {
-                if(Movies.ContainsKey(movie))
-                    Movies[movie]++; 
-                else
-                    Movies.Add(movie, 1);
+            {          
+                    Movies.Add(movie);
             }    
         }    
 
@@ -52,6 +49,7 @@ namespace VideoStoreBusinessLayer
         public void RentMovie(string movieTitle, string socialSecurityNumber)
         {
             //if(Movies.Contains())
+            var movieToRent = Movies.FirstOrDefault(x => x.Title == movieTitle) ?? throw new MovieDontExistsExeption("Movie dont exists.");
         }
 
         public void ReturnMovie(string movieTitle, string socialSecurityNumber)
@@ -65,7 +63,7 @@ namespace VideoStoreBusinessLayer
             // Title Shud not be null
             var movieResult = string.IsNullOrEmpty(movie.Title) ? 
                 throw new MovieTitelsIsNullOrEmptyExeption("Movie title cant be null or empty. Need a string") : true;
-            var movieCount = Movies[movie];
+            var movieCount = Movies.Where(x => x.Title == movie.Title).Count();
 
             // Cant have more then 3 of same movie
             if(movieCount >= 3)
@@ -74,13 +72,13 @@ namespace VideoStoreBusinessLayer
             }
             return movieResult;
         }
-        private static Dictionary<Movie,int> FillMovieStorage()
+        private static List<Movie> FillMovieStorage()
         {
-            var storage = new Dictionary<Movie,int>();
-            storage.Add(new Movie("Die hard", MovieGenre.Action),2);
-            storage.Add(new Movie("Titanic", MovieGenre.Drama),3);
-            storage.Add(new Movie("The mask", MovieGenre.Comedy),1);
-            storage.Add(new Movie("Zombie attack", MovieGenre.Horror),1);
+            var storage = new List<Movie>();
+            storage.Add(new Movie("Die hard", MovieGenre.Action));
+            storage.Add(new Movie("Titanic", MovieGenre.Drama));
+            storage.Add(new Movie("The mask", MovieGenre.Comedy));
+            storage.Add(new Movie("Zombie attack", MovieGenre.Horror));
             return storage;
         }
 

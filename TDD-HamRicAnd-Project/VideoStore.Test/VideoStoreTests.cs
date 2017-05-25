@@ -28,7 +28,7 @@ namespace VideoStoreTest
         public void TrueIfCanAddNewMovieToStore()
         {
             sut.AddMovie(TestMovie);
-            var movie = sut.Movies.Where(x => x.Key.Title == "Transporter" && x.Key.Genre == MovieGenre.Action);
+            var movie = sut.Movies.Where(x => x.Title == "Transporter" && x.Genre == MovieGenre.Action);
             Assert.IsTrue(movie != null);
         }
         [Test]
