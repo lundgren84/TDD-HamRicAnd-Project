@@ -6,6 +6,13 @@ using System.Threading.Tasks;
 
 namespace VideoStoreBusinessLayer
 {
+    public class CustomerDontExistsExeption : Exception
+    {
+        public CustomerDontExistsExeption(string message) : base(message)
+        {
+
+        }
+    }
     public class MovieDontExistsExeption : Exception
     {
         public MovieDontExistsExeption(string message) : base(message)

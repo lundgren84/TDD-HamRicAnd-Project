@@ -48,7 +48,9 @@ namespace VideoStoreBusinessLayer
 
         public void RentMovie(string movieTitle, string socialSecurityNumber)
         {
-            //if(Movies.Contains())
+            //Check if Customer exists
+            var customer = Customers[socialSecurityNumber]?? throw new CustomerDontExistsExeption("Customer dont exists.");
+            //Check if movie exists
             var movieToRent = Movies.FirstOrDefault(x => x.Title == movieTitle) ?? throw new MovieDontExistsExeption("Movie dont exists.");
         }
 

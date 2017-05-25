@@ -83,15 +83,19 @@ namespace VideoStoreTest
         [Test]
         public void ThrowExeptionIfRentNonExistingMovie()
         {
+            sut.RegisterCustomer(TestCustomer.Name, TestCustomer.SSN);
             Assert.Throws<MovieDontExistsExeption>(() =>
             {
                 sut.RentMovie("Olles film om havet", TestCustomer.SSN);
             });
         }
         [Test]
-        public void MotRegistredCustomersCantRentMovie()
+        public void ThrowExeptionNonExistingCustomerRentsMovie()
         {
-
+            Assert.Throws<CustomerDontExistsExeption>(() =>
+            {
+                sut.RentMovie(TestMovie.Title, TestCustomer.SSN);
+            });
         }
     }
 }
