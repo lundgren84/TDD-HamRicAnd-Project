@@ -10,11 +10,13 @@ namespace VideoStoreBusinessLayer
     public class VideoStore : IVideoStore
     {
         public List<Movie> Movies { get; set; }
+        private IRental Rental { get; set; }
         public Dictionary<string, string> Customers { get; set; } 
         private Regex SsnRegex = new Regex(@"^\d{4}-\d{2}-\d{2}$");
 
-        public VideoStore()
+        public VideoStore(IRental rental)
         {
+            this.Rental = rental;
             this.Movies = FillMovieStorage();
             this.Customers = new Dictionary<string, string>();
         }

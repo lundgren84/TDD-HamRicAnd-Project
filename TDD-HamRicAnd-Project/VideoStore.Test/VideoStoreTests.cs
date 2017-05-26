@@ -15,12 +15,13 @@ namespace VideoStoreTest
         private IVideoStore sut;
         private Movie TestMovie;
         private Customer TestCustomer;
-        private IRentals rental = Substitute.For<IRentals>();
+      
 
         [SetUp]
         public void Setup()
         {
-            sut = new VideoStore();
+            var rental = Substitute.For<IRental>();
+            sut = new VideoStore(rental);
             TestMovie = new Movie("Transporter", MovieGenre.Action);
             TestCustomer = new Customer("Olle Svensson", "1978-06-14");
         }

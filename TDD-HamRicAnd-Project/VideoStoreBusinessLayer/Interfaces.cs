@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace VideoStoreBusinessLayer
 {
 
-    public interface IRentals
+    public interface IRental
     {
         void AddRental(string movieTitle, string socialSecurityNumber);
         void RemoveRental(string movieTitle, string socialSecurityNumber);
