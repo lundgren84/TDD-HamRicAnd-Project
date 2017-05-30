@@ -1,23 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace VideoStoreBusinessLayer
 {
-    public class Rental : IRental
+   public class Rental
     {
-        public void AddRental(string movieTitle, string socialSecurityNumber)
+        public DateTime _dueDate { get; set; }
+        public string _movieTitle { get; set; }
+        public string _customerSsn { get; set; }
+    
+        public Rental(DateTime dueDate, string movieTitle,string customerSsn)
         {
-            throw new NotImplementedException();
+            _dueDate = dueDate;
+            _movieTitle = movieTitle;
+            _customerSsn = customerSsn;
         }
-
-        public List<Rental> GetRentalsFor(string socialSecurityNumber)
+        public bool IsLate()
         {
-            throw new NotImplementedException();
+            return _dueDate < DateTime.Now;
         }
-
-        public void RemoveRental(string movieTitle, string socialSecurityNumber)
-        {
-            throw new NotImplementedException();
-        }
+      
     }
 }

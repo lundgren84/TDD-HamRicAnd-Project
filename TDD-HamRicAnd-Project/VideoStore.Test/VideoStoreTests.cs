@@ -20,7 +20,7 @@ namespace VideoStoreTest
         [SetUp]
         public void Setup()
         {
-            var rental = Substitute.For<IRental>();
+            var rental = Substitute.For<IRentals>();
             sut = new VideoStore(rental);
             TestMovie = new Movie("Transporter", MovieGenre.Action);
             TestCustomer = new Customer("Olle Svensson", "1978-06-14");
@@ -95,7 +95,7 @@ namespace VideoStoreTest
         {
             Assert.Throws<CustomerDontExistsExeption>(() =>
             {
-                sut.RentMovie(TestMovie.Title, TestCustomer.SSN);
+                sut.RentMovie(TestMovie.Title, "19840613");
             });
         }
     }

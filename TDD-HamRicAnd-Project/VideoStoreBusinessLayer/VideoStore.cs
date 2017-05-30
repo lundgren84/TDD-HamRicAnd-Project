@@ -10,13 +10,13 @@ namespace VideoStoreBusinessLayer
     public class VideoStore : IVideoStore
     {
         public List<Movie> Movies { get; set; }
-        private IRental Rental { get; set; }
+        private IRentals Rentals { get; set; }
         public Dictionary<string, string> Customers { get; set; } 
         private Regex SsnRegex = new Regex(@"^\d{4}-\d{2}-\d{2}$");
 
-        public VideoStore(IRental rental)
+        public VideoStore(IRentals rentals)
         {
-            this.Rental = rental;
+            this.Rentals = rentals;
             this.Movies = FillMovieStorage();
             this.Customers = new Dictionary<string, string>();
         }
@@ -50,8 +50,21 @@ namespace VideoStoreBusinessLayer
 
         public void RentMovie(string movieTitle, string socialSecurityNumber)
         {
+            ValidateRental(movieTitle, socialSecurityNumber);
+        }
+
+        private void ValidateRental(string movieTitle, string socialSecurityNumber)
+        {
             //Check if Customer exists
-            var customer = Customers[socialSecurityNumber]?? throw new CustomerDontExistsExeption("Customer dont exists.");
+            try
+            {
+                var customer = Customers[socialSecurityNumber];
+            }
+            catch (KeyNotFoundException)
+            {
+
+                throw new CustomerDontExistsExeption("Customer dont exists.");
+            }
             //Check if movie exists
             var movieToRent = Movies.FirstOrDefault(x => x.Title == movieTitle) ?? throw new MovieDontExistsExeption("Movie dont exists.");
         }

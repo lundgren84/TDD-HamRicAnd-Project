@@ -48,4 +48,37 @@ namespace VideoStoreBusinessLayer
 
         }
     }
+    public class RentalOverloadExeption : Exception
+    {
+        public RentalOverloadExeption(string message):base(message)
+        {
+
+        }
+        public RentalOverloadExeption()
+        {
+
+        }
+    }
+    public class ForbidenRentalExeption : Exception
+    {
+        public ForbidenRentalExeption(string message) : base(message)
+        {
+
+        }
+        public ForbidenRentalExeption()
+        {
+
+        }
+    }
+    public class LateRentalExeption : Exception
+    {
+        public LateRentalExeption(string message) : base(message)
+        {
+
+        }
+        public LateRentalExeption()
+        {
+
+        }
+    }
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace VideoStoreBusinessLayer
 {
 
-    public interface IRental
+    public interface IRentals
     {
         void AddRental(string movieTitle, string socialSecurityNumber);
         void RemoveRental(string movieTitle, string socialSecurityNumber);
@@ -24,6 +24,10 @@ namespace VideoStoreBusinessLayer
         List<Customer> GetCustomers();
         void ReturnMovie(string movieTitle, string socialSecurityNumber);
   
+    }
+   public interface IDateTime
+    {
+        DateTime Now();
     }
 
 }
