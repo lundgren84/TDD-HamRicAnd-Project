@@ -13,6 +13,7 @@ namespace VideoStoreTest
     public class VideoStoreTests
     {
         private IVideoStore sut;
+        private IRentals rentals;
         private Movie TestMovie;
         private Customer TestCustomer;
       
@@ -20,8 +21,8 @@ namespace VideoStoreTest
         [SetUp]
         public void Setup()
         {
-            var rental = Substitute.For<IRentals>();
-            sut = new VideoStore(rental);
+            rentals = Substitute.For<IRentals>();
+            sut = new VideoStore(rentals);
             TestMovie = new Movie("Transporter", MovieGenre.Action);
             TestCustomer = new Customer("Olle Svensson", "1978-06-14");
         }
@@ -92,11 +93,24 @@ namespace VideoStoreTest
         }
         [Test]
         public void ThrowExeptionNonExistingCustomerRentsMovie()
-        {
+        {      
             Assert.Throws<CustomerDontExistsExeption>(() =>
             {
-                sut.RentMovie(TestMovie.Title, "19840613");
+                sut.RentMovie(TestMovie.Title, TestCustomer.SSN);
             });
+        }
+        [Test]
+      public void TrueIfIRentalsRunsAddRentalWhenRentMovie()
+        {
+            sut.AddMovie(TestMovie);
+            sut.RegisterCustomer(TestCustomer.Name, TestCustomer.SSN);
+            sut.RentMovie(TestMovie.Title, TestCustomer.SSN);
+            rentals.Received(1).AddRental(Arg.Any<string>(), Arg.Any<string>());
+        }
+        //[Test]
+        public void TrueIfIRentalsRunsRemoveRentalWhenReturnMovie()
+        {
+            Assert.AreEqual(1, 2);
         }
     }
 }

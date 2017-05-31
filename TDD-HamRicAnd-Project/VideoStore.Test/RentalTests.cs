@@ -92,5 +92,15 @@ namespace VideoStoreTest
                 sut.AddRental("Die hard2", "19880606");
             });
         }
+        //[Test]
+        public void TrueIfAbleToReturnMovie()
+        {
+            Assert.AreEqual(1, 2);
+        }
+        //[Test]
+        public void ThrowsExeptionIfTryReturnMovieYouDontRent()
+        {
+            Assert.AreEqual(1, 2);
+        }
     }
 }

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace VideoStoreBusinessLayer
 {
@@ -80,5 +76,18 @@ namespace VideoStoreBusinessLayer
         {
 
         }
+    }
+    public static class ExeptionMessages
+    {
+       public const string CustomerDontExistsExeptionMessage = "Customer dont exists.";
+        public const string MovieDontExistsExeptionMessage = "Movie dont exists.";
+        public const string CustomerExistsExeptionMessage = "Customer with that SocialSecurityNumber allready exists. Registry failed.";
+        public const string InvalidSocialSecurityNumberExeptionMessage = "Invalid SocialSecurityNumber. Use YYYY-MM-DD";
+        public const string MovieTitelsIsNullOrEmptyExeptionMessage = "Movie title cant be null or empty. Need a string";
+        public const string MovieTitleOverloadExeptionMessage = "You cant add more movies with that title. (Max 3 Copies of same title)";
+        public const string RentalOverloadExeptionMessage = "Customers can maximum have 3 active rentals.";
+        public const string ForbidenRentalExeptionMessage = "Not allowed to rent same Movie-title twice.";
+        public const string LateRentalExeptionMessage = "Return late rentals to enable new rentals.";
+
     }
 }

@@ -38,11 +38,11 @@ namespace VideoStoreBusinessLayer
         {
             if (Customers.ContainsKey(socialSecurityNumber))
             {
-                throw new CustomerExistsExeption("Customer with SocialSecurityNumber: "+ socialSecurityNumber+" allready exists. Registry failed.");
+                throw new CustomerExistsExeption(ExeptionMessages.CustomerExistsExeptionMessage);
             }
             else if (!SsnRegex.IsMatch(socialSecurityNumber))
             {
-                throw new InvalidSocialSecurityNumberExeption("Invalid SocialSecurityNumber. Use YYYY-MM-DD");
+                throw new InvalidSocialSecurityNumberExeption(ExeptionMessages.InvalidSocialSecurityNumberExeptionMessage);
             }
            else
                 Customers.Add(socialSecurityNumber, name);   
@@ -51,6 +51,7 @@ namespace VideoStoreBusinessLayer
         public void RentMovie(string movieTitle, string socialSecurityNumber)
         {
             ValidateRental(movieTitle, socialSecurityNumber);
+            Rentals.AddRental(movieTitle, socialSecurityNumber);
         }
 
         private void ValidateRental(string movieTitle, string socialSecurityNumber)
@@ -62,11 +63,10 @@ namespace VideoStoreBusinessLayer
             }
             catch (KeyNotFoundException)
             {
-
-                throw new CustomerDontExistsExeption("Customer dont exists.");
+                throw new CustomerDontExistsExeption(ExeptionMessages.CustomerDontExistsExeptionMessage);
             }
             //Check if movie exists
-            var movieToRent = Movies.FirstOrDefault(x => x.Title == movieTitle) ?? throw new MovieDontExistsExeption("Movie dont exists.");
+            var movieToRent = Movies.FirstOrDefault(x => x.Title == movieTitle) ?? throw new MovieDontExistsExeption(ExeptionMessages.MovieDontExistsExeptionMessage);
         }
 
         public void ReturnMovie(string movieTitle, string socialSecurityNumber)
@@ -79,13 +79,13 @@ namespace VideoStoreBusinessLayer
         {
             // Title Shud not be null
             var movieResult = string.IsNullOrEmpty(movie.Title) ? 
-                throw new MovieTitelsIsNullOrEmptyExeption("Movie title cant be null or empty. Need a string") : true;
+                throw new MovieTitelsIsNullOrEmptyExeption(ExeptionMessages.MovieTitelsIsNullOrEmptyExeptionMessage) : true;
             var movieCount = Movies.Where(x => x.Title == movie.Title).Count();
 
             // Cant have more then 3 of same movie
             if(movieCount >= 3)
             {
-                throw new MovieTitleOverloadExeption("You cant add more movies with title: "+movie.Title+" (Max 3 Copies of same title)");          
+                throw new MovieTitleOverloadExeption(ExeptionMessages.MovieTitleOverloadExeptionMessage);          
             }
             return movieResult;
         }

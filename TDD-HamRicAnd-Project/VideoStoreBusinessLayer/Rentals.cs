@@ -24,14 +24,14 @@ namespace VideoStoreBusinessLayer
             var rentals = _rentals.Where(x => x._customerSsn == socialSecurityNumber).ToList();
            if (rentals.Count()>= 3)
             {
-                throw new RentalOverloadExeption("Customers can maximum have 3 active rentals.");
+                throw new RentalOverloadExeption(ExeptionMessages.RentalOverloadExeptionMessage);
             }
             foreach (var rental in rentals)
             {
                 if (rental._movieTitle == movieTitle)
-                    throw new ForbidenRentalExeption("Not allowed to rent same Movie-title twice.");
+                    throw new ForbidenRentalExeption(ExeptionMessages.ForbidenRentalExeptionMessage);
                 if (rental.IsLate())
-                    throw new LateRentalExeption("Return late rentals to enable new rentals.");
+                    throw new LateRentalExeption(ExeptionMessages.LateRentalExeptionMessage);
             }
          
         }
