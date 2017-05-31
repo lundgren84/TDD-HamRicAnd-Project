@@ -108,6 +108,11 @@ namespace VideoStoreTest
             rentals.Received(1).AddRental(Arg.Any<string>(), Arg.Any<string>());
         }
         //[Test]
+        public void ThrowsExeptionIfTryReturnMovieYouDontRent()
+        {
+            Assert.AreEqual(1, 2);
+        }
+        //[Test]
         public void TrueIfIRentalsRunsRemoveRentalWhenReturnMovie()
         {
             Assert.AreEqual(1, 2);
