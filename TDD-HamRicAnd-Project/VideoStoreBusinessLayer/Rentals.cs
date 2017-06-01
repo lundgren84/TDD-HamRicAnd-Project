@@ -43,7 +43,10 @@ namespace VideoStoreBusinessLayer
 
         public void RemoveRental(string movieTitle, string socialSecurityNumber)
         {
-            throw new NotImplementedException();
+            var rentalToRemove = _rentals.FirstOrDefault(x => x._movieTitle == movieTitle &&
+            x._customerSsn == socialSecurityNumber);
+
+            _rentals.Remove(rentalToRemove);
         }
     }
 }
