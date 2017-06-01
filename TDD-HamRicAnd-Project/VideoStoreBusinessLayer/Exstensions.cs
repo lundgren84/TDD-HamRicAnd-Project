@@ -18,6 +18,17 @@ namespace VideoStoreBusinessLayer
             }
             return customerList;
         }
+        public static void CheckCustomerExsistence(this Dictionary<string,string> customers, string socialSecurityNumber)
+        {
+            try
+            {
+                var customer = customers[socialSecurityNumber];
+            }
+            catch (KeyNotFoundException)
+            {
+                throw new CustomerDontExistsExeption(ExeptionMessages.CustomerDontExistsExeptionMessage);
+            }
+        }
     }
    
 }

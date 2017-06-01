@@ -12,7 +12,6 @@ namespace VideoStoreBusinessLayer
         public List<Movie> Movies { get; set; }
         private IRentals Rentals { get; set; }
         public Dictionary<string, string> Customers { get; set; } 
-        private Regex SsnRegex = new Regex(@"^\d{4}-\d{2}-\d{2}$");
 
         public VideoStore(IRentals rentals)
         {
@@ -36,20 +35,23 @@ namespace VideoStoreBusinessLayer
 
         public void RegisterCustomer(string name, string socialSecurityNumber)
         {
-            if (Customers.ContainsKey(socialSecurityNumber))
+           if(StaticHelp.ValidateSocialSecurityNumber(socialSecurityNumber))
             {
-                throw new CustomerExistsExeption(ExeptionMessages.CustomerExistsExeptionMessage);
+                if (Customers.ContainsKey(socialSecurityNumber))
+                {
+                    throw new CustomerExistsExeption(ExeptionMessages.CustomerExistsExeptionMessage);
+                }
+                else
+                    Customers.Add(socialSecurityNumber, name);
             }
-            else if (!SsnRegex.IsMatch(socialSecurityNumber))
-            {
-                throw new InvalidSocialSecurityNumberExeption(ExeptionMessages.InvalidSocialSecurityNumberExeptionMessage);
-            }
-           else
-                Customers.Add(socialSecurityNumber, name);   
-        }    
+           
+        }
+
+    
 
         public void RentMovie(string movieTitle, string socialSecurityNumber)
         {
+            StaticHelp.ValidateSocialSecurityNumber(socialSecurityNumber);
             ValidateRental(movieTitle, socialSecurityNumber);
             Rentals.AddRental(movieTitle, socialSecurityNumber);
         }
@@ -57,21 +59,28 @@ namespace VideoStoreBusinessLayer
         private void ValidateRental(string movieTitle, string socialSecurityNumber)
         {
             //Check if Customer exists
-            try
-            {
-                var customer = Customers[socialSecurityNumber];
-            }
-            catch (KeyNotFoundException)
-            {
-                throw new CustomerDontExistsExeption(ExeptionMessages.CustomerDontExistsExeptionMessage);
-            }
+            Customers.CheckCustomerExsistence(socialSecurityNumber);   
+      
             //Check if movie exists
-            var movieToRent = Movies.FirstOrDefault(x => x.Title == movieTitle) ?? throw new MovieDontExistsExeption(ExeptionMessages.MovieDontExistsExeptionMessage);
+            var movieToRent = Movies.FirstOrDefault(x => x.Title == movieTitle) ?? throw new MovieDontExistsExeption("Rental failed. "+ExeptionMessages.MovieDontExistsExeptionMessage);
         }
+
 
         public void ReturnMovie(string movieTitle, string socialSecurityNumber)
         {
-            throw new NotImplementedException();
+            //Validate SSN
+            StaticHelp.ValidateSocialSecurityNumber(socialSecurityNumber);
+            //Check if Customer exists
+            Customers.CheckCustomerExsistence(socialSecurityNumber);
+            //Check Movie      
+            var rental =Rentals.GetRentalsFor(socialSecurityNumber)?.FirstOrDefault(x => x._movieTitle == movieTitle) ??  throw new MovieDontExistsExeption("Return failed. "+ExeptionMessages.MovieDontExistsExeptionMessage);
+
+            if(rental._dueDate < DateTime.Now)
+            {
+                throw new LateRentalExeption(ExeptionMessages.LateRentalExeptionMessage);
+            }
+
+            Rentals.RemoveRental(movieTitle, socialSecurityNumber);
         }
 
         // Private Methods
@@ -98,7 +107,7 @@ namespace VideoStoreBusinessLayer
             storage.Add(new Movie("Zombie attack", MovieGenre.Horror));
             return storage;
         }
-
     
+
     }
 }

@@ -15,6 +15,7 @@ namespace VideoStoreBusinessLayer
         }
         public void AddRental(string movieTitle, string socialSecurityNumber)
         {
+            StaticHelp.ValidateSocialSecurityNumber(socialSecurityNumber);
             ValidateRental(movieTitle, socialSecurityNumber);
             _rentals.Add(new Rental(_dateTime.Now().AddDays(3),movieTitle, socialSecurityNumber));
         }
@@ -43,6 +44,7 @@ namespace VideoStoreBusinessLayer
 
         public void RemoveRental(string movieTitle, string socialSecurityNumber)
         {
+            StaticHelp.ValidateSocialSecurityNumber(socialSecurityNumber);
             var rentalToRemove = _rentals.FirstOrDefault(x => x._movieTitle == movieTitle &&
             x._customerSsn == socialSecurityNumber);
 

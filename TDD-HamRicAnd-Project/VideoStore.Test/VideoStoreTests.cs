@@ -107,15 +107,62 @@ namespace VideoStoreTest
             sut.RentMovie(TestMovie.Title, TestCustomer.SSN);
             rentals.Received(1).AddRental(Arg.Any<string>(), Arg.Any<string>());
         }
-        //[Test]
+        [Test]
+        public void ThrowsExeptionIfNotRegisterdCustomerTryReturnMovie()
+        {
+            Assert.Throws<CustomerDontExistsExeption>(() =>
+            {
+                sut.ReturnMovie("DieHard", TestCustomer.SSN);
+            });         
+        }
+       
+         [Test]
         public void ThrowsExeptionIfTryReturnMovieYouDontRent()
         {
-            Assert.AreEqual(1, 2);
+            sut.RegisterCustomer(TestCustomer.Name, TestCustomer.SSN);
+            Assert.Throws<MovieDontExistsExeption>(() =>
+            {
+                sut.ReturnMovie("Olles film om löv3", TestCustomer.SSN);
+            });
+
         }
-        //[Test]
+        [Test]
         public void TrueIfIRentalsRunsRemoveRentalWhenReturnMovie()
         {
-            Assert.AreEqual(1, 2);
+            rentals.GetRentalsFor(Arg.Any<string>()).Returns(new List<Rental>() {new Rental(DateTime.Now,TestMovie.Title,TestCustomer.SSN )});
+
+            AddCustomer_AddMovie();
+            sut.RentMovie(TestMovie.Title, TestCustomer.SSN);
+
+            sut.ReturnMovie(TestMovie.Title, TestCustomer.SSN);
+
+            rentals.Received(1).RemoveRental(Arg.Any<string>(),Arg.Any<string>());
+        }
+        [Test]
+        public void ThrowsIfReturningMovieWithLateDueDate()
+        {
+            rentals.GetRentalsFor(Arg.Any<string>()).Returns(new List<Rental>() { new Rental(DateTime.Now, TestMovie.Title, TestCustomer.SSN) });
+       
+
+            AddCustomer_AddMovie();
+            sut.RentMovie(TestMovie.Title, TestCustomer.SSN);
+
+
+            Assert.Throws<LateRentalExeption>(() =>
+            {
+                sut.ReturnMovie(TestMovie.Title, TestCustomer.SSN);
+            });
+        }
+
+
+
+        public void AddCustomer_AddMovie()
+        {
+            sut.RegisterCustomer(TestCustomer.Name, TestCustomer.SSN);
+
+            sut.AddMovie(TestMovie);
+
+         
         }
     }
 }

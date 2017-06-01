@@ -100,11 +100,15 @@ namespace Rental.Test
         [Test]
         public void TrueIfAbleToReturnMovie()
         {
-            sut.AddRental("Die hard", TestCustomer.SSN);
+            //Arange
+            sut.AddRental(TestMovie.Title, TestCustomer.SSN);
+            //Act
             sut.RemoveRental(TestMovie.Title, TestCustomer.SSN);
             var rentals = sut.GetRentalsFor(TestCustomer.SSN);
+            //Assert
             Assert.AreEqual(0, rentals.Count);
         }
+
       
     }
 }
