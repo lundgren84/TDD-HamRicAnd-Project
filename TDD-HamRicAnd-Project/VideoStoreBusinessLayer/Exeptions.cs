@@ -2,6 +2,14 @@
 
 namespace VideoStoreBusinessLayer
 {
+
+    public class NameNullOrEmptyExeption : Exception
+    {
+        public NameNullOrEmptyExeption(string message) : base(message)
+        {
+
+        }
+    }
     public class CustomerDontExistsExeption : Exception
     {
         public CustomerDontExistsExeption(string message) : base(message)
@@ -16,7 +24,7 @@ namespace VideoStoreBusinessLayer
 
         }
     }
-    public class CustomerExistsExeption: Exception
+    public class CustomerExistsExeption : Exception
     {
         public CustomerExistsExeption(string message) : base(message)
         {
@@ -46,7 +54,7 @@ namespace VideoStoreBusinessLayer
     }
     public class RentalOverloadExeption : Exception
     {
-        public RentalOverloadExeption(string message):base(message)
+        public RentalOverloadExeption(string message) : base(message)
         {
 
         }
@@ -79,7 +87,7 @@ namespace VideoStoreBusinessLayer
     }
     public static class ExeptionMessages
     {
-       public const string CustomerDontExistsExeptionMessage = "Customer dont exists.";
+        public const string CustomerDontExistsExeptionMessage = "Customer dont exists.";
         public const string MovieDontExistsExeptionMessage = "Movie dont exists.";
         public const string CustomerExistsExeptionMessage = "Customer with that SocialSecurityNumber allready exists. Registry failed.";
         public const string InvalidSocialSecurityNumberExeptionMessage = "Invalid SocialSecurityNumber. Use YYYY-MM-DD";
@@ -88,6 +96,8 @@ namespace VideoStoreBusinessLayer
         public const string RentalOverloadExeptionMessage = "Customers can maximum have 3 active rentals.";
         public const string ForbidenRentalExeptionMessage = "Not allowed to rent same Movie-title twice.";
         public const string LateRentalExeptionMessage = "Return late rentals to enable new rentals.";
+        public const string NameNullOrEmptyExeptionMessage = "Name can not be null or empty.";
 
+      
     }
 }

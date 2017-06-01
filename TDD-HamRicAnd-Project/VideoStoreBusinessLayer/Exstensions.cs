@@ -14,7 +14,7 @@ namespace VideoStoreBusinessLayer
             var customerList = new List<Customer>();
             foreach (var customer in Customers)
             {
-                customerList.Add(new Customer(customer.Value, customer.Key));
+                customerList.Add(new Customer(customer.Key,customer.Value));
             }
             return customerList;
         }

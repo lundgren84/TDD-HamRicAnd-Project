@@ -24,7 +24,7 @@ namespace VideoStoreTest
             rentals = Substitute.For<IRentals>();
             sut = new VideoStore(rentals);
             TestMovie = new Movie("Transporter", MovieGenre.Action);
-            TestCustomer = new Customer("Olle Svensson", "1978-06-14");
+            TestCustomer = new Customer("1978-06-14","Olle Svensson" );
         }
         [Test]
         public void TrueIfCanAddNewMovieToStore()
@@ -58,7 +58,7 @@ namespace VideoStoreTest
         [Test]
         public void CanRegisterCustomer()
         {
-            sut.RegisterCustomer(TestCustomer.Name,TestCustomer.SSN);
+            sut.RegisterCustomer(TestCustomer.SSN, TestCustomer.Name);
             var customer = sut.GetCustomers().FirstOrDefault(x => x.SSN == TestCustomer.SSN);
 
             Assert.IsNotNull(customer);
@@ -66,26 +66,36 @@ namespace VideoStoreTest
         [Test]
         public void ThrowExeptionIfAddExisitingUser()
         {
-            sut.RegisterCustomer(TestCustomer.Name, TestCustomer.SSN);
+            sut.RegisterCustomer( TestCustomer.SSN, TestCustomer.Name);
 
             Assert.Throws<CustomerExistsExeption>(() =>
             {
-                sut.RegisterCustomer(TestCustomer.Name, TestCustomer.SSN);
+                sut.RegisterCustomer(TestCustomer.SSN, TestCustomer.Name);
             });
             ;
+        }
+        [Test]
+        public void ThrowIfRegisterCustomerWithoutName()
+        {
+            Assert.Throws<NameNullOrEmptyExeption>(() => {
+
+
+                sut.RegisterCustomer(TestCustomer.SSN, "");
+            });
         }
         [Test]
         public void ThrowExeptionIfInvalidSocialSecurityNumber()
         {
             Assert.Throws<InvalidSocialSecurityNumberExeption>(() =>
             {
-                sut.RegisterCustomer(TestCustomer.Name, "19781027");
+                sut.RegisterCustomer("74747474", TestCustomer.Name);
+            
             });
         }
         [Test]
         public void ThrowExeptionIfRentNonExistingMovie()
         {
-            sut.RegisterCustomer(TestCustomer.Name, TestCustomer.SSN);
+            sut.RegisterCustomer(TestCustomer.SSN, TestCustomer.Name);
             Assert.Throws<MovieDontExistsExeption>(() =>
             {
                 sut.RentMovie("Olles film om havet", TestCustomer.SSN);
@@ -103,7 +113,7 @@ namespace VideoStoreTest
       public void TrueIfIRentalsRunsAddRentalWhenRentMovie()
         {
             sut.AddMovie(TestMovie);
-            sut.RegisterCustomer(TestCustomer.Name, TestCustomer.SSN);
+            sut.RegisterCustomer(TestCustomer.SSN, TestCustomer.Name);
             sut.RentMovie(TestMovie.Title, TestCustomer.SSN);
             rentals.Received(1).AddRental(Arg.Any<string>(), Arg.Any<string>());
         }
@@ -119,7 +129,7 @@ namespace VideoStoreTest
          [Test]
         public void ThrowsExeptionIfTryReturnMovieYouDontRent()
         {
-            sut.RegisterCustomer(TestCustomer.Name, TestCustomer.SSN);
+            sut.RegisterCustomer(TestCustomer.SSN, TestCustomer.Name);
             Assert.Throws<MovieDontExistsExeption>(() =>
             {
                 sut.ReturnMovie("Olles film om löv3", TestCustomer.SSN);
@@ -158,7 +168,7 @@ namespace VideoStoreTest
 
         public void AddCustomer_AddMovie()
         {
-            sut.RegisterCustomer(TestCustomer.Name, TestCustomer.SSN);
+            sut.RegisterCustomer(TestCustomer.SSN, TestCustomer.Name);
 
             sut.AddMovie(TestMovie);
 

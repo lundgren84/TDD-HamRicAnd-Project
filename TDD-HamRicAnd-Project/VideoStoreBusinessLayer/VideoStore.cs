@@ -9,15 +9,20 @@ namespace VideoStoreBusinessLayer
 {
     public class VideoStore : IVideoStore
     {
-        public List<Movie> Movies { get; set; }
+        public List<Movie> Movies { get; set; } = new List<Movie>();
         private IRentals Rentals { get; set; }
-        public Dictionary<string, string> Customers { get; set; } 
+        public Dictionary<string, string> Customers { get; set; } = new Dictionary<string, string>();
 
         public VideoStore(IRentals rentals)
         {
-            this.Rentals = rentals;
-            this.Movies = FillMovieStorage();
-            this.Customers = new Dictionary<string, string>();
+            this.Rentals = rentals; 
+        }
+
+        public Dictionary<string, string> FillCustomers()
+        {
+            var customers = new Dictionary<string, string>();
+            customers.Add("1111-11-11", "Olle Svensson");
+            return Customers;
         }
 
         public void AddMovie(Movie movie)
@@ -33,8 +38,11 @@ namespace VideoStoreBusinessLayer
             return Customers.ToCustomerList();
         }
 
-        public void RegisterCustomer(string name, string socialSecurityNumber)
+        public void RegisterCustomer( string socialSecurityNumber, string name)
         {
+           if (string.IsNullOrEmpty(name))
+                throw new NameNullOrEmptyExeption(ExeptionMessages.NameNullOrEmptyExeptionMessage);
+
            if(StaticHelp.ValidateSocialSecurityNumber(socialSecurityNumber))
             {
                 if (Customers.ContainsKey(socialSecurityNumber))
@@ -75,12 +83,13 @@ namespace VideoStoreBusinessLayer
             //Check Movie      
             var rental =Rentals.GetRentalsFor(socialSecurityNumber)?.FirstOrDefault(x => x._movieTitle == movieTitle) ??  throw new MovieDontExistsExeption("Return failed. "+ExeptionMessages.MovieDontExistsExeptionMessage);
 
-            if(rental._dueDate < DateTime.Now)
+         
+            Rentals.RemoveRental(movieTitle, socialSecurityNumber);
+
+            if (rental._dueDate < DateTime.Now)
             {
                 throw new LateRentalExeption(ExeptionMessages.LateRentalExeptionMessage);
             }
-
-            Rentals.RemoveRental(movieTitle, socialSecurityNumber);
         }
 
         // Private Methods
@@ -98,7 +107,7 @@ namespace VideoStoreBusinessLayer
             }
             return movieResult;
         }
-        private static List<Movie> FillMovieStorage()
+        public List<Movie> FillMovieStorage()
         {
             var storage = new List<Movie>();
             storage.Add(new Movie("Die hard", MovieGenre.Action));

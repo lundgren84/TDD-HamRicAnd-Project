@@ -24,7 +24,7 @@ namespace Rental.Test
             dateTime.Now().Returns(DateTime.Now);
             sut = new Rentals(dateTime);
             TestMovie = new Movie("Transporter", MovieGenre.Action);
-            TestCustomer = new Customer("Olle Svensson", "1978-06-14");
+            TestCustomer = new Customer( "1978-06-14", "Olle Svensson");
         }
         [Test]
         public void TrueIfAbleToAddRental()

@@ -4,7 +4,7 @@
     {
         public string Name { get; set; }
         public string SSN { get; set; }
-        public Customer(string name,string ssn)
+        public Customer(string ssn, string name)
         {
             this.Name = name;
             this.SSN = ssn;
