@@ -12,8 +12,7 @@ namespace VideoStoreUI
         static void Main(string[] args)
         {        
             var rentals = new Rentals(new DateTimes());
-            var VidStore = new VideoStore(rentals);
-            VidStore.Customers = VidStore.FillCustomers();
+            var VidStore = new VideoStore(rentals);          
             VidStore.Movies = VidStore.FillMovieStorage();
             SUTVideoStoreConsole VideoStore = new SUTVideoStoreConsole(VidStore);
             VideoStore.StarMenu();

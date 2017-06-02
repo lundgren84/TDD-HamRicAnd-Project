@@ -24,20 +24,37 @@ namespace VideoStoreUI
             Console.BackgroundColor = ConsoleColor.Black;
             Console.ForegroundColor = ConsoleColor.White;
         }
+        public static void Heading(string input)
+        {
+            Console.BackgroundColor = ConsoleColor.Gray;
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.WriteLine(input);
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.ForegroundColor = ConsoleColor.White;
+        }
         public static void MainMenu()
         {
             var menuString =
           $@"
-START MENU
-
 1. Register New Customer
-2. Rent Movie
-3. Return Movie
-4. Add Movie
-5. Get Customer
-6. EXIT
+2. Get Customer
+3. Get Customers
 ";
+            var menuString2 =
+$@"   
+4. Rent Movie
+5. Return Movie
+6. Add Movie
+7. Get Movies
+
+8. EXIT
+";
+            ConsoleWrite.Heading("START MENU");
+            Console.WriteLine(Environment.NewLine);
+            ConsoleWrite.Heading("Customer Section");
             Console.WriteLine(menuString);
+            ConsoleWrite.Heading("Movie Section");
+            Console.WriteLine(menuString2);
         }
 
         internal static void ErrorInput()

@@ -18,12 +18,7 @@ namespace VideoStoreBusinessLayer
             this.Rentals = rentals; 
         }
 
-        public Dictionary<string, string> FillCustomers()
-        {
-            var customers = new Dictionary<string, string>();
-            customers.Add("1111-11-11", "Olle Svensson");
-            return Customers;
-        }
+    
 
         public void AddMovie(Movie movie)
         {
@@ -103,7 +98,7 @@ namespace VideoStoreBusinessLayer
             // Cant have more then 3 of same movie
             if(movieCount >= 3)
             {
-                throw new MovieTitleOverloadExeption(ExeptionMessages.MovieTitleOverloadExeptionMessage);          
+                throw new MovieTitleOverloadExeption(ExeptionMessages.MovieTitleOverloadExeptionMessage);
             }
             return movieResult;
         }
@@ -115,8 +110,7 @@ namespace VideoStoreBusinessLayer
             storage.Add(new Movie("The mask", MovieGenre.Comedy));
             storage.Add(new Movie("Zombie attack", MovieGenre.Horror));
             return storage;
-        }
-    
+        }     
 
     }
 }

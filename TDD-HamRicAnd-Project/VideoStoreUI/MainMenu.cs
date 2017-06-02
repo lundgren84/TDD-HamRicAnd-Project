@@ -33,19 +33,25 @@ namespace VideoStoreUI
                         RegisterCustomer();
                         break;
                     case '2':
-                        RentMovie();
+                      //  GetCustomer();             
                         break;
                     case '3':
-                        ReturnMovie();
+                      //  GetCustomers();                   
                         break;
                     case '4':
-                        AddMovie();
+                        RentMovie();                    
                         break;
                     case '5':
-                        GetCustomer();
+                        ReturnMovie();
                         break;
                     case '6':
+                        AddMovie();
                         break;
+                    case '7':
+                     //   GetMovies();  
+                        break;
+                    case '8':
+                        return;
                     default:
                         ErrorInput();
                         break;
@@ -53,9 +59,50 @@ namespace VideoStoreUI
             }
         }
 
-        private void AddMovie()
+        private void GetMovies()
         {
             throw new NotImplementedException();
+        }
+
+        private void GetCustomers()
+        {
+            throw new NotImplementedException();
+        }
+
+        private void AddMovie()
+        {
+            var flag = true;    
+            var title = "";        
+            while (flag)
+            {
+                var menuString = $@"
+ADD NEW MOVIE.   Enter EXIT to Abort.
+
+Movie title:
+";
+                Console.WriteLine(menuString);
+                if (Abort(title = Console.ReadLine())) { Console.Clear(); return; }
+
+                try
+                {
+                    _videoStore.AddMovie(new Movie(title, MovieGenre.Action));
+                    flag = false;
+                }
+                catch (MovieTitelsIsNullOrEmptyExeption ex)
+                {
+                    Console.Clear();
+                    ConsoleWrite.Error(ex.Message.ToString());
+                }
+                catch (MovieTitleOverloadExeption ex)
+                {
+                    Console.Clear();
+                    ConsoleWrite.Error(ex.Message.ToString());
+                }              
+            }
+            Console.Clear();
+         
+
+            ConsoleWrite.Success("Add Movie Succeded: " + title+" Genre: "+"");
         }
 
         private void ErrorInput()
@@ -86,9 +133,9 @@ RETURN MOVIE.   Enter EXIT to Abort.
 Movie title:
 ";
                 Console.WriteLine(menuString);
-                if (Abort(title = Console.ReadLine())) return;
+                if (Abort(title = Console.ReadLine())) { Console.Clear(); return; }
                 Console.WriteLine("Customer SocialSecurityNumber: ");
-                if (Abort(ssn = Console.ReadLine())) return;
+                if (Abort(ssn = Console.ReadLine())) { Console.Clear(); return; }
                 try
                 {
                     _videoStore.ReturnMovie(title, ssn);
@@ -97,22 +144,22 @@ Movie title:
                 catch (InvalidSocialSecurityNumberExeption ex)
                 {
                     Console.Clear();
-                    ConsoleWrite.Error(ex.ToString());
+                    ConsoleWrite.Error(ex.Message.ToString());
                 }
                 catch (CustomerDontExistsExeption ex)
                 {
                     Console.Clear();
-                    ConsoleWrite.Error(ex.ToString());
+                    ConsoleWrite.Error(ex.Message.ToString());
                 }
                 catch (MovieDontExistsExeption ex)
                 {
                     Console.Clear();
-                    ConsoleWrite.Error(ex.ToString());
+                    ConsoleWrite.Error(ex.Message.ToString());
                 }
                 catch (LateRentalExeption ex)
                 {
                     Console.Clear();
-                    ConsoleWrite.Error(ex.ToString());
+                    ConsoleWrite.Error(ex.Message.ToString());
                     lateReturn = true;
                 }
             }
@@ -135,9 +182,9 @@ RENT MOVIE.   Enter EXIT to Abort.
 Movie title:
 ";
                 Console.WriteLine(menuString);
-                if (Abort(title = Console.ReadLine())) return;
+                if (Abort(title = Console.ReadLine())) { Console.Clear(); return; }
                 Console.WriteLine("Customer SocialSecurityNumber: ");
-                if (Abort(ssn = Console.ReadLine())) return;
+                if (Abort(ssn = Console.ReadLine())) { Console.Clear(); return; }
                 try
                 {
                     _videoStore.RentMovie(title, ssn);
@@ -146,18 +193,19 @@ Movie title:
                 catch (InvalidSocialSecurityNumberExeption ex)
                 {
                     Console.Clear();
-                    ConsoleWrite.Error(ex.ToString());
+                    ConsoleWrite.Error(ex.Message.ToString());
                 }
                 catch (CustomerDontExistsExeption ex)
                 {
                     Console.Clear();
-                    ConsoleWrite.Error(ex.ToString());
+                    ConsoleWrite.Error(ex.Message.ToString());
                 }
                 catch (MovieDontExistsExeption ex)
                 {
                     Console.Clear();
-                    ConsoleWrite.Error(ex.ToString());
+                    ConsoleWrite.Error(ex.Message.ToString());
                 }
+               
             }
             Console.Clear();
             ConsoleWrite.Success("Rent Succeded! Movie: " + title + ". Customer: " + ssn);
@@ -172,10 +220,11 @@ Movie title:
             while (flag)
             {
                 var menuString1 = $@"
-REGISTER NEW CUSTOMER.   Enter EXIT to Abort.
+
 
 EnterName:
 ";
+                ConsoleWrite.Heading("REGISTER NEW CUSTOMER.   Enter EXIT to Abort.");
                 Console.WriteLine(menuString1);
                 name = Console.ReadLine();
                 if (Abort(name))
@@ -192,17 +241,17 @@ EnterName:
                 catch (InvalidSocialSecurityNumberExeption ex)
                 {
                     Console.Clear();
-                    ConsoleWrite.Error(ex.ToString());
+                    ConsoleWrite.Error(ex.Message.ToString());
                 }
                 catch (NameNullOrEmptyExeption ex)
                 {
                     Console.Clear();
-                    ConsoleWrite.Error(ex.ToString());
+                    ConsoleWrite.Error(ex.Message.ToString());
                 }
                 catch (CustomerExistsExeption ex)
                 {
                     Console.Clear();
-                    ConsoleWrite.Error(ex.ToString());
+                    ConsoleWrite.Error(ex.Message.ToString());
                 }
             }
             Console.Clear();
