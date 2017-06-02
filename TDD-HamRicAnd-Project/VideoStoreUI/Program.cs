@@ -10,11 +10,13 @@ namespace VideoStoreUI
     class Program
     {
         static void Main(string[] args)
-        {        
-            var rentals = new Rentals(new DateTimes());
+        {
+            var date = new DateTimes();
+            var rentals = new Rentals(date);
+         
             var VidStore = new VideoStore(rentals);          
             VidStore.Movies = VidStore.FillMovieStorage();
-            SUTVideoStoreConsole VideoStore = new SUTVideoStoreConsole(VidStore);
+            SUTVideoStoreConsole VideoStore = new SUTVideoStoreConsole(VidStore,rentals);
             VideoStore.StarMenu();
         }
     }

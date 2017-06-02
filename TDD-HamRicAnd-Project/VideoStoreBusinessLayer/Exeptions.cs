@@ -97,7 +97,8 @@ namespace VideoStoreBusinessLayer
         public const string ForbidenRentalExeptionMessage = "Not allowed to rent same Movie-title twice.";
         public const string LateRentalExeptionMessage = "Return late rentals to enable new rentals.";
         public const string NameNullOrEmptyExeptionMessage = "Name can not be null or empty.";
+        public const string LateReturnExeptionMessage = "Movie Returned After Due-Date!";
 
-      
+
     }
 }

@@ -65,9 +65,9 @@ namespace VideoStoreBusinessLayer
             Customers.CheckCustomerExsistence(socialSecurityNumber);   
       
             //Check if movie exists
-            var movieToRent = Movies.FirstOrDefault(x => x.Title == movieTitle) ?? throw new MovieDontExistsExeption("Rental failed. "+ExeptionMessages.MovieDontExistsExeptionMessage);
+            var movieToRent = Movies.FirstOrDefault(x => x.Title.ToLower() == movieTitle.ToLower()) ?? throw new MovieDontExistsExeption("Rental failed. "+ExeptionMessages.MovieDontExistsExeptionMessage);
         }
-
+   
 
         public void ReturnMovie(string movieTitle, string socialSecurityNumber)
         {
@@ -76,14 +76,14 @@ namespace VideoStoreBusinessLayer
             //Check if Customer exists
             Customers.CheckCustomerExsistence(socialSecurityNumber);
             //Check Movie      
-            var rental =Rentals.GetRentalsFor(socialSecurityNumber)?.FirstOrDefault(x => x._movieTitle == movieTitle) ??  throw new MovieDontExistsExeption("Return failed. "+ExeptionMessages.MovieDontExistsExeptionMessage);
+            var rental =Rentals.GetRentalsFor(socialSecurityNumber)?.FirstOrDefault(x => x._movieTitle.ToLower() == movieTitle.ToLower()) ??  throw new MovieDontExistsExeption("Return failed. "+ExeptionMessages.MovieDontExistsExeptionMessage);
 
          
             Rentals.RemoveRental(movieTitle, socialSecurityNumber);
 
             if (rental._dueDate < DateTime.Now)
             {
-                throw new LateRentalExeption(ExeptionMessages.LateRentalExeptionMessage);
+                throw new LateRentalExeption(ExeptionMessages.LateReturnExeptionMessage);
             }
         }
 

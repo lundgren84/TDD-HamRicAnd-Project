@@ -14,9 +14,11 @@ namespace VideoStoreUI
     public class SUTVideoStoreConsole
     {
         private IVideoStore _videoStore { get; set; }
-        public SUTVideoStoreConsole(IVideoStore _videoStore)
+        private IRentals _rentals { get; set; }
+        public SUTVideoStoreConsole(IVideoStore _videoStore,IRentals _rentals)
         {
             this._videoStore = _videoStore;
+            this._rentals = _rentals;
         }
         public void StarMenu()
         {
@@ -33,10 +35,10 @@ namespace VideoStoreUI
                         RegisterCustomer();
                         break;
                     case '2':
-                      //  GetCustomer();             
+                        GetCustomer();             
                         break;
                     case '3':
-                      //  GetCustomers();                   
+                        GetCustomers();                   
                         break;
                     case '4':
                         RentMovie();                    
@@ -48,7 +50,7 @@ namespace VideoStoreUI
                         AddMovie();
                         break;
                     case '7':
-                     //   GetMovies();  
+                        GetMovies();  
                         break;
                     case '8':
                         return;
@@ -61,12 +63,34 @@ namespace VideoStoreUI
 
         private void GetMovies()
         {
-            throw new NotImplementedException();
+         
+            ConsoleWrite.Heading("MOVIES in stock");
+            Console.WriteLine( "##########################################"+ Environment.NewLine );
+            var nr = 1;
+            foreach (var movie in _videoStore.Movies)
+            {
+                Console.WriteLine("*"+nr+"  Title: " + movie.Title+" - Genre: "+movie.Genre);
+                nr++;
+            }
+            Console.WriteLine(Environment.NewLine+"##########################################");
         }
 
         private void GetCustomers()
         {
-            throw new NotImplementedException();
+            ConsoleWrite.Heading("CUSTOMERS in register");
+            Console.WriteLine("##########################################" + Environment.NewLine);
+            var nr = 1;
+            var customers = _videoStore.GetCustomers();
+            foreach (var customer in customers)
+            {
+                Console.WriteLine("*" + nr + "  Name: " + customer.Name + " - SocialSecurityNumber: " + customer.SSN);
+                nr++;
+            }
+            if(customers.Count == 0)
+            {
+                Console.WriteLine("Registry is Empty.");
+            }
+            Console.WriteLine(Environment.NewLine + "##########################################");
         }
 
         private void AddMovie()
@@ -114,9 +138,43 @@ Movie title:
 
         private void GetCustomer()
         {
-            var menuString = $@"";
+            ConsoleWrite.Heading("GET CUSTOMER.  enter Exit to abort."+Environment.NewLine);
+            Console.WriteLine("Enter SocialSecurityNumber:");
+            var ssn = "";
+            List<Rental> rentals = new List<Rental>();
+            Customer customer = new Customer();
+            if (Abort(ssn = Console.ReadLine())) { Console.Clear(); return; }
+            try
+            {
+                rentals = _rentals.GetRentalsFor(ssn);
+            }
+            catch (Exception ex)
+            {
+                Console.Clear();
+                ConsoleWrite.Error(ex.Message.ToString());            
+            }
+            try
+            {
+                customer = (_videoStore.GetCustomers()).FirstOrDefault(x => x.SSN == ssn);
+            }
+            catch (Exception ex)
+            {
+                Console.Clear();
+                ConsoleWrite.Error(ex.Message.ToString());
+            }
 
-            Console.WriteLine(menuString);
+            Console.WriteLine("*  Name: " + customer.Name + " - SocialSecurityNumber: " + customer.SSN);
+            Console.WriteLine("Rentals:");
+            if(rentals.Count == 0)
+                Console.WriteLine("No rentals");
+            else
+            foreach (var rent in rentals)
+            {
+                Console.WriteLine("Title: "+rent._movieTitle+"Shud be returned before: "+rent._dueDate);
+                if (rent.IsLate())
+                    ConsoleWrite.Error("MOVIE IS LATE!");
+            }
+
         }
 
         private void ReturnMovie()
@@ -161,6 +219,7 @@ Movie title:
                     Console.Clear();
                     ConsoleWrite.Error(ex.Message.ToString());
                     lateReturn = true;
+                    flag = false;
                 }
             }
             Console.Clear();
